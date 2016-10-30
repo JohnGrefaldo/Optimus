@@ -184,7 +184,7 @@ First Name,Middle Initial,Last Name,Email Address,Age,Gender,Address,City,State,
 Joel,Dorne,Abramson,Joel@Objective.Agency,26,Male,Leeds,London,England,UK,1234
 </span></pre>
         <br><br>
-        <input type="hidden" name="_token" value="2mDZneMtMV34a03qpKOoPX1BPrkFbxmT4XDVA3lh">
+        {{csrf_field() }}
         <div class="form-group">
           <input type="file" required="" name="csvfile" accept=".csv">
         </div>

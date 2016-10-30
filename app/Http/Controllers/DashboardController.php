@@ -26,11 +26,15 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        function errmsg($err){
+            Session::flash('flash_message',$err);
+            Session::flash('alertType',0);
+        }
         if (!empty(Auth::user()->OAuth)) {
             $listid = \App\lists::select('id')->whereUser_id(Auth::user()->id)->get()->toArray();
+
             if(empty($listid)){
-                Session::flash('flash_message','Please create list first!');
-                Session::flash('alertType',0);
+                errmsg('Please create list first!');
                 return redirect('subscribers');
             }
                 
@@ -96,7 +100,11 @@ class DashboardController extends Controller
                     return $value;
 
                 });
-
+                // dd();
+                if(empty($subref->count())){
+                    errmsg('No associated data found, Please make sure that the campaigns still exist at your Mailchimp account');
+                    return redirect('campaign');
+                }
 
                 $charts['least5'] = $charts['least5']->sort()->reverse()->keys();
                 function _orderSort($var){
@@ -117,10 +125,37 @@ class DashboardController extends Controller
                 
                 // $charts['top5'] = $charts['top5']
 
-                $charts['gender'] = \App\subscribers::select(\DB::raw('gender, COUNT(*) AS count'))
+                $charts['gender'] = \App\subscribers::select(\DB::raw('gender'))
                             ->wherein('email',$subref)
-                            ->groupBy('gender')
-                            ->get()->groupBy('gender');
+                            ->get();
+
+                $charts->put('gender',$charts['gender'] //get and pipe data to extract gender
+                        ->pipe(function($values){
+
+                        $var['male'] = 0;
+                        $var['female'] = 0;
+                        if($values->count()!=0){
+                        $var['total'] = $values->count();
+                        }else{
+                            $var['total']=1;
+                        }
+                        // dd($values->gender);
+                        foreach($values as $item){
+                            
+                            if (strtolower($item->gender) === 'male')
+                                $var['male'] += 1;
+                            if (strtolower($item->gender) === 'female')
+                                $var['female'] += 1;
+                        }
+                        
+                        return $var;
+
+                    }));
+                $tmp = $charts['gender'];
+                unset($tmp['total']);
+                arsort($tmp);
+                $tmp = array_keys($tmp);
+                $charts->tmp = $tmp;
 
                 $charts['countries'] = \App\subscribers::select(\DB::raw('country, COUNT( * ) AS count'))
                             ->wherein('email',$subref)
@@ -150,6 +185,7 @@ class DashboardController extends Controller
                 $charts['campaign'] = \App\campaigns::select('name','activity.camp_id',\DB::raw('count(*) as count'))
                             ->join('activity','activity.camp_id', '=', 'campaigns.id')
                             ->where('activity.open','<>','null')
+                            ->where('campaigns.list_id','=',$listid)
                             ->groupBy('camp_id')
                             ->orderBy('count','desc')->get();
                             

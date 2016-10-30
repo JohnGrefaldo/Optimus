@@ -152,7 +152,7 @@ trait ApiWrapperMethod {
         while(empty($Batch->check_status()['finished_operations'])){
             // $Batch->check_status()['errored_operations'];
         }
-        dd($Batch->check_status());
+        // dd($Batch->check_status());
         if(!empty($Batch->check_status()['errored_operations'])){
             $result = 0; 
         }else{
@@ -357,15 +357,23 @@ trait ApiWrapperMethod {
 
 
     public function getData($resource,$param = ''){
+
         $this->setkey($param);
         $getList = new Mailchimp($this->Oauthkey);
-
+        $exclude = ['fields' => 'total_items'];
+        $count = $getList->get($resource,$exclude);
+        $count = end($count);
+        // dd($count);
         $exclude = explode("/",$resource);
-        $exclude = ['exclude_fields'=>$exclude[count($exclude)-1].'._links,_links'];
+
+        $exclude = ['exclude_fields'=>$exclude[count($exclude)-1].'._links,_links','count' => $count];
 
         $result = $getList->get($resource,$exclude);
+        // dump($exclude,$result);
 
         return $result;
+
+        
 
     }
 
@@ -455,7 +463,7 @@ trait ApiWrapperMethod {
 
 
           \App\subscribers::firstOrCreate($subs);
-               
+          
 	    	}
             
 		}	

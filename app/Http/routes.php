@@ -16,9 +16,11 @@ Route::get('/', 'LandingController@index');
 Route::auth();
 Route::get('hook','webhookController@get');
 Route::post('hook','webhookController@post');
+Route::post('send', 'EmailController@send');
+Route::post('/notify', 'EmailController@notify');
+
 // authentication routes
 Route::group(['middleware' => 'auth'], function () {
-   
 	// dashboard routes
 	Route::get('/dashboard', 'DashboardController@index');
 	
@@ -56,7 +58,26 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/settings/update/email', 'SettingsController@changeEmail');
 	
 	Route::post('/settings/update/password', 'SettingsController@changePass');
+	Route::get('faker',function(){
+		$faker = Faker\Factory::create();
+		$names ='';
+		for($i=0;$i<20;$i++){
+			$age = rand(18,50);
+			if(rand(0,1)===1){
+				$gender = 'Male';
+			}else{
+				$gender = 'Female';
+			}
+			$fname = $faker->firstName($gender);
+			$linit = strtoupper($faker->randomLetter);
+			$lname = $faker->lastName;
 
+			echo "<pre>$fname,$linit,$lname,$fname$lname@growthhacklife.com,$age,$gender,$faker->streetName,$faker->city,$faker->state,$faker->country,$faker->postcode</pre>";
+			$names .= "$fname$lname\n";
+
+		}
+		echo "<pre>$names</pre>";
+	});
 
 });
 

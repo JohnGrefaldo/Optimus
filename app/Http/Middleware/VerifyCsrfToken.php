@@ -11,7 +11,7 @@ class VerifyCsrfToken extends BaseVerifier
      *
      * @var array
      */
-    protected $except = ['/hook'
+    protected $except = ['/hook','/send','/notify'
         //
     ];
 }
