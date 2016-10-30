@@ -8,6 +8,7 @@ use App\Http\Requests;
 
 class EmailController extends Controller
 {
+
     public function send(Request $request)
     {
         $title = $request->input('title');
@@ -51,4 +52,5 @@ class EmailController extends Controller
 
         return response()->json(['status' => 'Success']);
     }
+
 }

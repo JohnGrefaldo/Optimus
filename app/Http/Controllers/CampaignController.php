@@ -46,7 +46,9 @@ class CampaignController extends Controller
                 PLACE CODES HERE
             */
             $list = \App\lists::where('user_id', '=', Auth::user()->id)->get();
+
             // dd($list);
+
                global $tmp;
                $tmp = [];
             foreach($list as $value){
