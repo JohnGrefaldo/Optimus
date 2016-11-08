@@ -26,7 +26,8 @@
           </ul>
         </div>
 
-        <button type="button" class="btn btn-space btn-success pull-right" id="download_pdf"><i class="icon icon-left s7-cloud-download"></i> Download PDF</button>
+        <a href="{{url('campaign/')}}/{{$campaignSelected->id}}/generatepdf" class="btn btn-space btn-success pull-right" id="download_pdf"><i class="icon icon-left s7-cloud-download"></i> Download PDF</a>
+        <!-- <button type="type" class="btn btn-space btn-success pull-right" id="download_pdf"><i class="icon icon-left s7-cloud-download"></i> Download PDF</button> -->
       </div>
 
     </div>

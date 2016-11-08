@@ -39,8 +39,8 @@ class ProfileController extends Controller
     	if ($request->hasFile('image')) {
     		$image = $request->file('image');
     		$filename = time().'.'.$image->getClientOriginalExtension();
-
-    		Image::make($image)->resize(300,300)->save(public_path('assets/img/uploads/'.$filename));
+            $path =  public_path('assets/img/uploads/' . $filename);
+    		Image::make($image->getRealPath())->resize(300,300)->save($path);
 
     		$user=Auth::user();
     		$user->image=$filename;

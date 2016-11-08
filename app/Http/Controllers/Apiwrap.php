@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Auth;
 class Apiwrap extends Controller
 { 	public $Oauthkey;
 
-	private function setkey($param=''){
+	public function setkey($param=''){
     if(empty($param)){
-		$this->Oauthkey = \Auth::User()->OAuth;
+		  $this->Oauthkey = \Auth::User()->OAuth;
     }else{
       $this->Oauthkey = $param;
     }
@@ -168,7 +168,7 @@ trait ApiWrapperMethod {
        
         $data['lists'][0]['id'];
      
-        $tmp = '{"url" : "https://b229df99.ngrok.io/hook",
+        $tmp = '{"url" : "https://cae30ced.ngrok.io/hook",
         "events" : {"subscribe" : true, 
         "unsubscribe" : true, 
         "profile" : true, 
@@ -187,45 +187,27 @@ trait ApiWrapperMethod {
     public function batch($list_id = string,$data = array()){
         
         $tmp = [];
+        if(!isset($this->Oauthkey))
         $this->setkey();
+
         $MailChimp = new MailChimp($this->Oauthkey);
-
-        // $del = $MailChimp->get('batches');
-
-        // foreach($del['batches'] as $value){
-        //     $MailChimp->delete("/batches/".$value['id']);
-            
-        // }
-        // dd($MailChimp->get('batches'));
-
-        $Batch = $MailChimp->new_batch();
-        
-        foreach ($data as $value) {
-               $tmp['merge_fields'] = $value;
-               unset($tmp['merge_fields']['email_address']);
-               $tmp['email_address'] = $value['email_address'];
-               $tmp['status'] = 'subscribed';
-               asort($tmp);
-               $Batch->post('',"lists/$list_id/members",$tmp);
-        }
-       
-        $Batch->execute();
-
-        $id = $Batch->check_status()['id'];
-        $MailChimp->new_batch($id);
-
-        while(empty($Batch->check_status()['finished_operations'])){
-            // $Batch->check_status()['errored_operations'];
+        $error['msg']=[];
+        $error['type'] ='';
+        $error['detail'] = '';
+        $error['test'] = '';
+        // dd($data,$list_id);
+        foreach ($data['members'] as $key => $value) {
+          // dd($value);
+              $MailChimp->post("lists/$list_id/members",$value);
+              if($MailChimp->getLastError()){
+              list($error['type'],$error['detail']) = explode(".",$MailChimp->getLastError());
+              array_push($error['msg'],$error['type'].$error['detail']);}
         }
         
-        if(!empty($Batch->check_status()['errored_operations'])){
-            $result = 0; 
-        }else{
-            $result = 1;
-        }
-        // dd($result);
-        $MailChimp->delete("/batches/$id");
-        return $result;
+        return response()->json($error['msg']);
+        unset($error['msg']);
+
+    
 
     }
 	
@@ -369,7 +351,7 @@ trait ApiWrapperMethod {
         $exclude = ['exclude_fields'=>$exclude[count($exclude)-1].'._links,_links','count' => $count];
 
         $result = $getList->get($resource,$exclude);
-        // dump($exclude,$result);
+       
 
         return $result;
 
@@ -462,7 +444,12 @@ trait ApiWrapperMethod {
 	    		} 
 
 
-          \App\subscribers::firstOrCreate($subs);
+          \App\subscribers::updateOrCreate([
+              'list_id'=>$subs['list_id'],
+              'email'=>$subs['email'],
+              'id'=>$subs['id']
+              ],
+              $subs);
           
 	    	}
             

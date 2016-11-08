@@ -185,7 +185,7 @@ class DashboardController extends Controller
                 $charts['campaign'] = \App\campaigns::select('name','activity.camp_id',\DB::raw('count(*) as count'))
                             ->join('activity','activity.camp_id', '=', 'campaigns.id')
                             ->where('activity.open','<>','null')
-                            ->where('campaigns.list_id','=',$listid)
+                            ->wherein('campaigns.list_id',$listid)
                             ->groupBy('camp_id')
                             ->orderBy('count','desc')->get();
                             
@@ -196,13 +196,15 @@ class DashboardController extends Controller
                  });
                 }
 
-                
+               
                 $charts['top5'] = \App\subscribers::select(\DB::raw('CONCAT(fname," ",mname," ",lname) as name'))
                             ->wherein('email',$charts['top5'])
+                            ->wherein('list_id',$listid)
                             ->orderByRaw("FIELD(email,'".implode("','",$charts['top5'])."')")->take(5)->get();
 
                 $charts['least5'] = \App\subscribers::select('age','city','state',\DB::raw('CONCAT(fname," ",mname," ",lname) as name'))
                             ->wherein('email',$charts['least5'])
+                            ->wherein('list_id',$listid)
                             ->orderByRaw("FIELD(email,'".implode("','",$charts['least5']->toArray())."')")->take(5)->get();
                 
                 function jose($var,$param){
@@ -213,7 +215,7 @@ class DashboardController extends Controller
                 })->sortByDesc('count')->take(1)->keys();}
 
                 $charts['least'] = [jose('age',$charts['least5']),jose('city',$charts['least5']),jose('state',$charts['least5'])];
-             // dd($charts->toArray());
+             // dump($charts->toArray());
             return view('dashboard',['charts' => $charts]);
         }else{
             return redirect('connections');

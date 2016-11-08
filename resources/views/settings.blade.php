@@ -119,3 +119,19 @@
 </div>
 
 @endsection
+
+@section('javascripts')
+
+
+<script src="/assets/lib/jquery.sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
+<script src="/assets/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    //initialize the javascript
+    App.init();
+    });//end document ready
+    
+</script>
+
+@endsection

@@ -10,7 +10,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use Excel;
-
+use \DrewM\MailChimp\MailChimp;
 class SubscriberController extends Controller
 {   private $api;
     public function __construct(){
@@ -312,8 +312,14 @@ class SubscriberController extends Controller
                                     }
                                     // validate email columns
                                     elseif ($i==3) {
-                                        if (!filter_var($val, FILTER_VALIDATE_EMAIL) === false) {
+                                        $emailValid = filter_var($val, FILTER_VALIDATE_EMAIL);
+                                        $containsApostrophe = preg_match("/'/",$val);
+                                        echo 'email validi: '.$emailValid.'<br>';
+                                        echo 'apostrophe: '. $containsApostrophe.'<br>';
+
+                                        if ( $emailValid != false && $containsApostrophe == 0) {
                                             $tmp[$finalData[$i]] = $val;
+                                            echo "string ....";
                                         } else {
                                             // remove row on the save queue
                                             $tmp = [];
@@ -344,7 +350,7 @@ class SubscriberController extends Controller
                             }
                             
                         }
-                        echo $invalid.'<br>';
+                        // echo $invalid.'<br>';
                         // dd($tmp1);
                         // dd($listId);
                         // $this->api->batch($listId,$tmp1);
@@ -353,7 +359,7 @@ class SubscriberController extends Controller
                     }else{
                         $msg = "File contains no data or Invalid CSV header/data format!";
                     }
-                    // dd($listId);
+                    // dd($tmp1);
                     $upload = $this->api->batch($listId,$tmp1);
                     
                     if($upload===0){
@@ -396,6 +402,22 @@ class SubscriberController extends Controller
         }else{
             return redirect('connections');
         }
+     }
+
+     public function csv(Request $request){
+
+        $data = str_replace("'","",str_replace(',[object Object]', '',$request->input('members')));
+        $data = '{"members":['.$data.']}';
+        
+        // dd(\Auth::User()->OAuth);
+        // dd($mp->header[2]);
+        // dd($url);
+        // dump(json_decode($data,true),$data);
+        // dd();
+        $this->api->setkey(\Auth::User()->OAuth);
+        return $this->api->batch($request->input('list'),json_decode($data,true));
+       
+
      }
 
 }

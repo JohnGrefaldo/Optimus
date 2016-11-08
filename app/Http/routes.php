@@ -10,17 +10,29 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+use Illuminate\Http\Request;
+use \DrewM\MailChimp\MailChimp;
 
 Route::get('/', 'LandingController@index');
 Route::auth();
 Route::get('hook','webhookController@get');
+Route::get('batch',function(){
+$MailChimp = new MailChimp('3cd7d871232b41133d81ba538503f24b');
+$batch = $MailChimp->get('/batches',['count'=>'20']);
+
+foreach($batch['batches'] as $garbage){
+
+	 $MailChimp->delete('/batches/'.$garbage['id']);
+}
+dd($MailChimp->get('/batches',['count'=>'20']));
+});
 Route::post('hook','webhookController@post');
 
 Route::post('send', 'EmailController@send');
 Route::post('/notify', 'EmailController@notify');
 
-
+Route::get('/campaign/{campaignId}/generatepdf', 'CampaignController@generatepdf');
+Route::get('/campaign/{campaignId}', 'CampaignController@details');
 
 // authentication routes
 Route::group(['middleware' => 'auth'], function () {
@@ -29,8 +41,8 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	// campaign routes
 	Route::get('/campaign', 'CampaignController@index');
-	Route::get('/campaign/{campaignId}', 'CampaignController@details');
-	Route::get('/campaign/{campaignId}/generatepdf', 'CampaignController@generatepdf');
+	
+	Route::post('test', 'SubscriberController@csv');
 	
 	// subscribers routes
 	Route::get('/subscribers', 'SubscriberController@lists');
@@ -61,6 +73,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/settings/update/email', 'SettingsController@changeEmail');
 	
 	Route::post('/settings/update/password', 'SettingsController@changePass');
+
+	
+	Route::get('ajax', function(){
+		$get = new MailChimp(\Auth::User()->OAuth);
+		return $get->get('campaigns',['exclude_fields'=>'campaigns._links,_links']);
+	});
+
+
 	Route::get('faker',function(){
 		$faker = Faker\Factory::create();
 		$names ='';
@@ -82,8 +102,15 @@ Route::group(['middleware' => 'auth'], function () {
 		echo "<pre>$names</pre>";
 	});
 
-});
 
 	
 
+});
 
+	
+Route::get('upload',function(Request $request){
+	// dump($request->all());
+	// //json_decode();
+	// dd();
+	return view('player');
+});

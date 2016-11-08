@@ -16,12 +16,7 @@
       <div class="col-md-3">
         <br><br>
         <div class="btn-group btn-hspace pull-right">
-          <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle" aria-expanded="false">Select a campaign <span class="caret"></span></button>
-          <ul role="menu" class="dropdown-menu">
-            @foreach($campaigns as $campaign)
-              <li><a href="{{ url('/campaign') }}/{{$campaign->id}}">{{$campaign->name}}</a></li>
-            @endforeach
-          </ul>
+          
         </div>
       </div>
 
@@ -74,5 +69,22 @@
   </div><!-- end main-content  -->
 
 </div>
+
+@endsection
+
+
+@section('javascripts')
+
+
+<script src="/assets/lib/jquery.sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
+<script src="/assets/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    //initialize the javascript
+    App.init();
+    });//end document ready
+    
+</script>
 
 @endsection

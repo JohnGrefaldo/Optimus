@@ -2,12 +2,22 @@
 
 @section('css')
 
-<link rel="stylesheet" type="text/css" href="/assets/lib/datatables/css/dataTables.bootstrap.min.css"/>
 
+<link rel="stylesheet" type="text/css" href="/assets/lib/datatables/css/dataTables.bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="/assets/lib/jquery.gritter/css/jquery.gritter.css">
 @endsection
 
 @section('content')
-
+<style>
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+</style>
 <div class="am-content">
   
   <div class="page-head">
@@ -21,7 +31,8 @@
         <br><br>
         <div class="pull-right">
           <button class="btn btn-primary btn-lg  md-trigger" data-toggle="modal" data-target="#md-colored" type="button">Add Subscriber</button>
-          <button type="button" class="btn btn-alt1 btn-lg md-trigger"  data-toggle="modal" data-target="#csvform">Upload CSV</button>
+          <input type="file" name="files" id="files" class="inputfile" accept=".csv" />
+          <label id="csv" for="files" class="btn btn-alt1 btn-lg md-trigger">Upload CSV</label>
           <button type="button" class="btn btn-default btn-lg md-trigger"  data-toggle="modal" data-target="#deleteList">Delete List</button>
         </div>
       </div>
@@ -167,39 +178,40 @@
 </div>
 
 
-
-<div id="csvform" tabindex="-1" role="dialog" class="modal fade modal-colored-header modal-colored-header-objective">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><i class="icon s7-close"></i></button>
-        <h3 class="modal-title">Add Subscriber</h3>
+<div id="loading" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel"
+data-backdrop="static" 
+data-keyboard="false" >
+<div class="modal-dialog">
+  <div class="modal-content">
+  <style>
+  .modal-body{
+    background: #15191f;
+  }
+  </style>
+    <div class="modal-body">
+        <div class="row">
+          <div class="col-md-9"><img src="https://s-media-cache-ak0.pinimg.com/originals/76/47/bb/7647bb7539382dd708010625c4598021.gif" width="500">
+          </div>
+          
       </div>
-      <form role="form" method="POST" action="{{ url('/subscriber/add/bulk') }}/{{$list_id}}"  enctype="multipart/form-data">
-
-      <div class="modal-body">
-        <h4>Please upload your csv file.</h4><p>Please follow this format for your CSV file</p>
-<pre><span class="inner-pre" style="font-size: 11px">//Always include the fist line as header
-First Name,Middle Initial,Last Name,Email Address,Age,Gender,Address,City,State,Country,Postal Code
-Joel,Dorne,Abramson,Joel@Objective.Agency,26,Male,Leeds,London,England,UK,1234
-</span></pre>
-        <br><br>
-        {{csrf_field() }}
-        <div class="form-group">
-          <input type="file" required="" name="csvfile" accept=".csv">
-        </div>
-
-      </div>
-      
-      <div class="modal-footer">
-        <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn objective-bg">Add</button>
-      </div>
-
-      </form>
     </div>
   </div>
 </div>
+</div>
+
+<div id="csvform" tabindex="-1" role="dialog" class="modal fade modal-colored-header modal-colored-header-objective" aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+<div role="alert" class="alert alert-success alert-icon alert-border-color alert-dismissible">
+                    <div class="icon"><span class="s7-check"></span></div>
+                    <div class="message">
+                      <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><strong>Success!</strong> File upload successful.
+                    </div>
+                  </div>
+</div>
+  
+
+  </div>
+
 
 
 <div id="deleteList" tabindex="-1" role="dialog" class="modal fade modal-colored-header modal-colored-header-warning">
@@ -247,6 +259,10 @@ Joel,Dorne,Abramson,Joel@Objective.Agency,26,Male,Leeds,London,England,UK,1234
 <script src="/assets/lib/datatables/plugins/buttons/js/buttons.colVis.js" type="text/javascript"></script>
 <script src="/assets/lib/datatables/plugins/buttons/js/buttons.bootstrap.js" type="text/javascript"></script>
 <script src="/assets/js/app-tables-datatables.js" type="text/javascript"></script>
+<!-- <script src="/assets/js/csv/papaparse.min.js"></script> -->
+<script src="/assets/js/csv/papaparse.js"></script>
+<script src="/assets/js/csv/csv.js"></script>
+<script src="/assets/lib/jquery.gritter/js/jquery.gritter.js" type="text/javascript"></script>
 
 
 <script type="text/javascript">
@@ -255,7 +271,24 @@ Joel,Dorne,Abramson,Joel@Objective.Agency,26,Male,Leeds,London,England,UK,1234
         //initialize the javascript
         App.init();
         App.dataTables();
-      });
+        $('button.close').click(function(){
+          location.reload();
+          $('#csvform').modal('hide');
+          
+        });
+        
+        
+      
+});
+
+      // if(Object.keys(stuff).length > 1){
+      //   console.log(stuff);
+      // }
+      // $('#file').change(function(){
+      //   data = $('#file');
+      //   sumbitCsv(data);
+
+      // });
 </script>
 
 

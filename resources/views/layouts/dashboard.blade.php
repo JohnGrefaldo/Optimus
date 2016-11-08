@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="/assets/img/favicon.png">
-    <title>Alumnify</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>Optimus</title>
     <link rel="stylesheet" type="text/css" href="/assets/lib/stroke-7/style.css"/>
-    <link rel="stylesheet" type="text/css" href="/assets/lib/jquery.nanoscroller/css/nanoscroller.css"/><!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="/assets/lib/jquery.nanoscroller/css/nanoscroller.css"/>
+
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/css/component.css" /> -->
+    <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
@@ -42,15 +45,15 @@
           
           <!-- <a href="#" class="am-toggle-right-sidebar">
             <span class="icon s7-menu2"></span>
-          </a>
+          </a> -->
 
           <a href="#" data-toggle="collapse" data-target="#am-navbar-collapse" class="am-toggle-top-header-menu collapsed">
             <span class="icon s7-angle-down"></span>
-          </a> -->
+          </a>
 
           <div id="am-navbar-collapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right am-user-nav">
-              <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">{{ Auth::user()->name }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/uploads/{{ Auth::user()->image }}"><span class="user-name">Samantha Amaretti</span><span class="angle-down s7-angle-down"></span></a>
+              <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">{{ Auth::user()->name }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/uploads/{{ Auth::user()->image }}"><span class="user-name"></span><span class="angle-down s7-angle-down"></span></a>
                 <ul role="menu" class="dropdown-menu">
                   <li><a href="{{ url('/profile') }}"> <span class="icon s7-user"></span>My profile</a></li>
                   <li><a href="{{ url('/settings') }}"> <span class="icon s7-config"></span>Settings</a></li>
@@ -94,10 +97,12 @@
       
 
     <script src="/assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
+    
+    
     <script src="/assets/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/assets/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.min.js" type="text/javascript"></script>
     <script src="/assets/js/main.js" type="text/javascript"></script>
-    
+    <div><span id="debug"></span></div>
 
     @yield('javascripts')
     

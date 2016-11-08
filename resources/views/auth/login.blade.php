@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="assets/img/favicon.png">
-    <title>Alumnify</title>
+    <title>Optimus</title>
     <link rel="stylesheet" type="text/css" href="assets/lib/stroke-7/style.css"/>
     <link rel="stylesheet" type="text/css" href="assets/lib/jquery.nanoscroller/css/nanoscroller.css"/><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -20,7 +20,7 @@
         <div class="main-content">
           <div class="login-container">
             <div class="panel panel-default">
-              <div class="panel-heading"><img src="assets/img/logo-full-retina.png" alt="logo" width="150px" height="150px" class="logo-img"><span>Please enter your user information.</span></div>
+              <div class="panel-heading"><img src="assets/img/logo-full-retina.png" alt="logo" width="150px" height="175px" class="logo-img"><span>Please enter your user information.</span></div>
               <div class="panel-body">
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                   {{ csrf_field() }}

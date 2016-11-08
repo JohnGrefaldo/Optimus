@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
-
 use Session;
 
 
@@ -21,11 +20,6 @@ class CampaignController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Show the application dashboard.
      *
@@ -242,15 +236,15 @@ class CampaignController extends Controller
     }
 
     public function generatePDF($campaignId){
+    	dd(Auth::user());
+        $snappy = new Pdf(base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'));
 
-        // dd();
+		header('Content-Type: application/pdf');
+		header('Content-Disposition: attachment; filename="campPDFtest.pdf"');
+        header('X-CSRF-TOKEN:');
+		echo $snappy->getOutput('http://104.236.139.237/campaign/21859866de/');
 
-        // Display the resulting pdf in the browser
-        // by setting the Content-type header to pdf
-        $snappy = new Pdf('/usr/local/bin/wkhtmltopdf');
-        header('Content-Type: application/pdf',true,200);
-        header('Content-Disposition: attachment; filename="file.pdf"');
-        echo $snappy->getOutput('http://www.github.com');
+		return redirect()->back();
 
     }
 
