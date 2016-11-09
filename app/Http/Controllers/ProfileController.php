@@ -39,15 +39,18 @@ class ProfileController extends Controller
     	if ($request->hasFile('image')) {
     		$image = $request->file('image');
     		$filename = time().'.'.$image->getClientOriginalExtension();
-            $path =  public_path('assets/img/uploads/' . $filename);
-    		Image::make($image->getRealPath())->resize(300,300)->save($path);
+            dump($image);
+            $path =  public_path().'/assets/img/uploads/'.$filename;
 
+    		Image::make($image->getRealPath())->resize(300,300)->save($path);
+            // dd($path);
     		$user=Auth::user();
     		$user->image=$filename;
     		$user->save();
 
     		Session::flash('flash_message', 'Profile Updated');
     	}
+
     	return redirect()->back();
     }
 }
