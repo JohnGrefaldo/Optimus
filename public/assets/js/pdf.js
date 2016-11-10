@@ -17,7 +17,7 @@ function createPDF(){
           unit:'px', 
           format:'a4'
         });
-        doc.addImage(img, 'JPEG', 30, 30, 400, 580 );
+        doc.addImage(img, 'PNG', 30, 30, 400, 580 );
         
         doc.save('alumnify-analytics.pdf');
         // form.width(cache_width);

@@ -36,6 +36,12 @@ Route::get('/campaign/{campaignId}', 'CampaignController@details');
 
 // authentication routes
 Route::group(['middleware' => 'auth'], function () {
+
+	Route::get('403', function()
+{
+    abort(403);
+});
+
 	// dashboard routes
 	Route::get('/dashboard', 'DashboardController@index');
 	
@@ -106,7 +112,12 @@ Route::group(['middleware' => 'auth'], function () {
 	
 
 });
-
+Route::get('/assets',function(Request $request){
+	// dump($request->all());
+	// //json_decode();
+	// dd();
+	return "hello world";
+});
 	
 Route::get('upload',function(Request $request){
 	// dump($request->all());

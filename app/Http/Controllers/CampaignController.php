@@ -177,6 +177,7 @@ class CampaignController extends Controller
                 }                
             $charts->least = \App\subscribers::select(\DB::raw('CONCAT( subscribers.fname,  " ", subscribers.mname,  " ", subscribers.lname ) AS name, activity.open'))
                     ->join('activity','activity.email_id','=','subscribers.email')
+                    ->where('subscribers.list_id','=',$subs_ref['listId'])
                     ->where('activity.camp_id','=',$campaignId)
                     ->wherein('subscribers.email',$charts->least->toArray())
                     ->orderBy('activity.open','asc')->take(5)
@@ -184,6 +185,7 @@ class CampaignController extends Controller
 
             $charts->name =\App\subscribers::select(\DB::raw('CONCAT( subscribers.fname,  " ", subscribers.mname,  " ", subscribers.lname ) AS name, activity.open'))
                     ->join('activity','activity.email_id','=','subscribers.email')
+                    ->where('subscribers.list_id','=',$subs_ref['listId'])
                     ->where('activity.camp_id','=',$campaignId)
                     ->wherein('subscribers.email',$subs_ref['email'])
                     ->orderBy('activity.open','asc')->take(5)
@@ -235,17 +237,6 @@ class CampaignController extends Controller
     
     }
 
-    public function generatePDF($campaignId){
-    	// dd(Auth::user());
-        $snappy = new Pdf(base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'));
-
-		header('Content-Type: application/pdf');
-		header('Content-Disposition: attachment; filename="campPDFtest.pdf"');
-        header('X-CSRF-TOKEN:');
-		echo $snappy->getOutput('http://104.236.139.237/campaign/21859866de/');
-
-		return redirect()->back();
-
-    }
+  
 
 }

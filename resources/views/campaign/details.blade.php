@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('css')
-  <link rel="stylesheet" type="text/css" href="/assets/css/print.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/assets/css/print.css"> -->
 @endsection
 
 @section('content')
@@ -26,8 +26,7 @@
           </ul>
         </div>
 
-        <a href="{{url('campaign/')}}/{{$campaignSelected->id}}/generatepdf" class="btn btn-space btn-success pull-right" id="download_pdf"><i class="icon icon-left s7-cloud-download"></i> Download PDF</a>
-        <!-- <button type="type" class="btn btn-space btn-success pull-right" id="download_pdf"><i class="icon icon-left s7-cloud-download"></i> Download PDF</button> -->
+        <button type="type" class="btn btn-space btn-success pull-right" id="download_pdf"><i class="icon icon-left s7-cloud-download"></i> Download PDF</button>
       </div>
 
     </div>
@@ -210,7 +209,9 @@
 
 @section('javascripts')
 
-
+<script src="/assets/js/jspdf.min.js"></script>
+<script src="/assets/js/html2canvas.min.js"></script>
+<script src="/assets/js/pdf.js"></script>
 <script src="/assets/lib/jquery.sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
 <script src="/assets/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 <script src="/assets/lib/countup/countUp.min.js" type="text/javascript"></script>
@@ -218,9 +219,7 @@
 <script src="/assets/js/app-dashboard.js" type="text/javascript"></script>
 <script src="/assets/lib/highcharts.js"></script>
 <script src="/assets/js/charts.js" type="text/javascript"></script>
-<script src="/assets/js/jspdf.min.js"></script>
-<script src="/assets/js/html2canvas.min.js"></script>
-<script src="/assets/js/pdf.js"></script>
+
 <script type="text/javascript">
 
   $(document).ready(function(){
@@ -240,5 +239,6 @@
     });//end document ready
     
 </script>
+
 
 @endsection
